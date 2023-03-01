@@ -38,7 +38,6 @@ class LoginActivity : AppCompatActivity() {
                     } else {
                         // 회원가입 실패
                         Toast.makeText(this, "회원가입에 실패했습니다.", Toast.LENGTH_SHORT).show()
-
                     }
                 }
         }
@@ -65,7 +64,6 @@ class LoginActivity : AppCompatActivity() {
                         Log.e("LoginActivity", task.exception.toString())
                         // com.google.firebase.auth.FirebaseAuthInvalidUserException: There is no user record corresponding to this identifier. The user may have been deleted.
                         Toast.makeText(this, "로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()
-
                     }
                 }
         }
