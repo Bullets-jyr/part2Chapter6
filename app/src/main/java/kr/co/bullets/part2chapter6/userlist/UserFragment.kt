@@ -47,15 +47,41 @@ class UserFragment : Fragment() {
         // 이 경우에는 addListenerForSingleValueEvent를 사용하여 로컬 디스크 캐시에서 데이터를 즉시 가져올 수 있습니다.
         // 이 방법은 한 번 로드된 후 자주 변경되지 않거나 능동적으로 수신 대기할 필요가 없는 데이터에 유용합니다.
         // 예를 들어 위 예시의 블로깅 앱에서는 사용자가 새 글을 작성하기 시작할 때 이 메서드로 사용자의 프로필을 로드합니다.
-        Firebase.database.reference.child(DB_USERS)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
+//        Firebase.database.reference.child(DB_USERS)
+//            .addListenerForSingleValueEvent(object : ValueEventListener {
+//                override fun onDataChange(snapshot: DataSnapshot) {
 //                    val list = snapshot.children.map {
 //                        it.getValue(UserItem::class.java)
 //                    }
 //
 //                    userListAdapter.submitList(list)
+//
+//                    val usersItemList = mutableListOf<UserItem>()
 
+//                    snapshot.children.forEach {
+//                        val users = it.getValue(UserItem::class.java)
+//                        users ?: return
+//
+//                        if (users.userId != currentUserId) {
+//                            usersItemList.add(users)
+//                        }
+//                    }
+//
+//                    userListAdapter.submitList(usersItemList)
+//                }
+//
+//                override fun onCancelled(error: DatabaseError) {
+//
+//                }
+//            })
+
+        // Firebase Realtime Database
+        // 영구 리스너로 데이터 읽기
+        // 경로에서 데이터를 읽고 변경사항을 수신 대기하려면 addValueEventListener() 메서드를 사용하여
+        // ValueEventListener를 DatabaseReference에 추가해야 합니다.
+        Firebase.database.reference.child(DB_USERS)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
                     val usersItemList = mutableListOf<UserItem>()
 
                     snapshot.children.forEach {
@@ -74,6 +100,7 @@ class UserFragment : Fragment() {
 
                 }
             })
+
 
 //        userListAdapter.submitList(
 //            mutableListOf<UserItem?>().apply {
