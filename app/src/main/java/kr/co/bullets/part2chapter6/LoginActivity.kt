@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import kr.co.bullets.part2chapter6.Key.Companion.DB_URL
+import kr.co.bullets.part2chapter6.Key.Companion.DB_USERS
 import kr.co.bullets.part2chapter6.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
@@ -54,7 +57,20 @@ class LoginActivity : AppCompatActivity() {
 
             Firebase.auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
+                    val currentUser = Firebase.auth.currentUser
+
+                    if (task.isSuccessful && currentUser != null) {
+                        val userId = currentUser.uid
+
+                        val user = mutableMapOf<String, Any>()
+                        user["userId"] = userId
+                        user["userName"] = email
+
+                        // Firebase Realtime Database
+                        // 데이터베이스 위치: 미국(us-central1)이 아닌 경우는 필수로 넣어주어야 합니다.
+//                        Firebase.database("https://part2-chapter6-e13e2-default-rtdb.firebaseio.com")
+                        Firebase.database(DB_URL).reference.child(DB_USERS).child(userId).updateChildren(user)
+
                         // 로그인 성공
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
